@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
-        minLength: [5, "your emai must have 5 character"],
+        minLength: [6, "your email must have 5 character"],
         lowerCase: true
     },
     password: {
