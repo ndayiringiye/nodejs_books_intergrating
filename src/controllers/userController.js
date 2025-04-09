@@ -4,10 +4,10 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken"
 
 export const signup = async (req, res) => {
-    const {username, email, password } = req.body;
+    const { username, email, password } = req.body;
 
     try {
-        const { error } = signupSchema.validate({username, email, password });
+        const { error } = signupSchema.validate({ username, email, password });
         if (error) {
             return res.status(400).json({ success: false, message: error.details[0].message });
         }
@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const newUser = new User({username, email, password: hashedPassword });
+        const newUser = new User({ username, email, password: hashedPassword });
         const result = await newUser.save();
 
         const userWithoutPassword = result.toObject();
@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
 
     } catch (error) {
         console.error("Signup Error:", error);
-        return res.status(500).json({ error:error.message });
+        return res.status(500).json({ error: error.message });
     }
 };
 
@@ -73,7 +73,18 @@ export const signin = async (req, res) => {
     }
 };
 
-export const loggnout = (req ,res) =>{
-    res.clearCookie("Authorization").status(200).json({success: true, message :"lognout in successfully"})
+export const loggnout = (req, res) => {
+    res.clearCookie("Authorization").status(200).json({ success: true, message: "lognout in successfully" })
 
-} 
+};
+
+export const sendEmail = async (req, res) => {
+    const { emai } = req.body;
+    try {
+        const existUser = await existUser.findOne({ email });
+        if (!existUser) return res.status(404).json({ success: false, message: "User does not exist" });
+        if (existUser.verified) return res.status(404).json({ success: false, message: "your already verified!" });
+    } catch (error) {
+     const codeValue = Math.floor(Math.random()* 1000000).toString()
+    }
+}
