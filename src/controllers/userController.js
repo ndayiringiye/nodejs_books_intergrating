@@ -4,10 +4,10 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken"
 
 export const signup = async (req, res) => {
-    const { email, password } = req.body;
+    const {username, email, password } = req.body;
 
     try {
-        const { error } = signupSchema.validate({ email, password });
+        const { error } = signupSchema.validate({username, email, password });
         if (error) {
             return res.status(400).json({ success: false, message: error.details[0].message });
         }
@@ -19,7 +19,7 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
-        const newUser = new User({ email, password: hashedPassword });
+        const newUser = new User({username, email, password: hashedPassword });
         const result = await newUser.save();
 
         const userWithoutPassword = result.toObject();
@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
 
     } catch (error) {
         console.error("Signup Error:", error);
-        return res.status(500).json({ success: false, message: "Server error. Please try again later." });
+        return res.status(500).json({ error:error.message });
     }
 };
 
@@ -72,3 +72,8 @@ export const signin = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
+
+export const loggnout = (req ,res) =>{
+    res.clearCookie("Authorization").status(200).json({success: true, message :"lognout in successfully"})
+
+} 
